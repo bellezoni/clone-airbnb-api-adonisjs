@@ -39,7 +39,7 @@ class PropertyController {
    * @param {Response} ctx.response
    */
   async store({ auth, request, response }) {
-    const { id } = auth.user
+    const { _id } = auth.user
     const data = request.only([
       'title',
       'address',
@@ -48,7 +48,7 @@ class PropertyController {
       'price'
     ])
 
-    const property = await Property.create({ ...data, user_id: id })
+    const property = await Property.create({ ...data, user_id: _id })
 
     return property
   }
@@ -105,7 +105,7 @@ class PropertyController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy({ params, request, response }) {
+  async destroy({ params, auth, response }) {
     const property = await Property.findOrFail(params.id)
 
     if (property.user_id !== auth.user.id) {
